@@ -32,15 +32,26 @@ class Controller:
         self._view.txtOut.controls.append(ft.Text(f"I maggiori 3 archi:"))
         self._model.archi_maggiori()
         for arco in self._model._migliori:
-            self._view.txtOut.controls.append(ft.Text(f"{arco}"))
-
+            self._view.txtOut.controls.append(ft.Text(f"Arco da {arco[0]} a {arco[1]}, peso={arco[2]["weight"]}"))
+        self._model.calcola_archi_ripetizioni()
+        stringa = ""
+        for arco in self._model._archi_ripetuti:
+            stringa += f"{arco} "
+        self._view.txtOut.controls.append(ft.Text(f"Archi ripetuti: {stringa}"))
+        self._view._ddnode.disabled = False
+        self.fillDDProduct()
         self._view.update_page()
 
 
-
     def fillDDProduct(self):
-        pass
+        for p in self._model._prodottiColore:
+            self._view._ddnode.options.append(ft.dropdown.Option(p.Product_number))
+        self._view.update_page()
 
 
     def handle_search(self, e):
-        pass
+        nodo = int(self._view._ddnode.value)
+        self._model.getPercorso(nodo)
+        self._view.txtOut2.controls.clear()
+        self._view.txtOut2.controls.append(ft.Text(f"Numero archi persorso più lungo: {self._model._numero_max}"))
+        self._view.update_page()

@@ -17,3 +17,6 @@ class Product:
 
     def __hash__(self):
         return hash(self.Product_number)
+
+    def __str__(self):
+        return f"{self.Product_number}"

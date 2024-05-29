@@ -55,14 +55,14 @@ class DAO():
     def getSalesSpec(v1, v2, anno):
         cnn = DBConnect.get_connection()
         cursor = cnn.cursor(dictionary=True)
-        query = """select gds.Product_number as p1, gds2.Product_number as p2, count(*) as n
-                from go_daily_sales gds, go_daily_sales gds2 
-                where year(gds.`Date`) = %s and gds.`Date` = gds2.`Date` 
-                and gds.Product_number = %s and gds2.Product_number = %s
+        query = """select COUNT(DISTINCT gds2.`Date`) AS PESO
+                    from go_daily_sales gds, go_daily_sales gds2 
+                    where gds.Retailer_code = gds2.Retailer_code AND year(gds.`Date`) = %s and gds.`Date` = gds2.`Date` 
+                    and gds.Product_number = %s and gds2.Product_number = %s
                 """
         cursor.execute(query, (anno, v1.Product_number, v2.Product_number))
         for row in cursor:
-            result = row["n"]
+            result = row["PESO"]
         cursor.close()
         cnn.close()
         return result
